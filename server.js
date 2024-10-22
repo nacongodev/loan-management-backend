@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const loanRoutes = require('./routes/loanRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 const limiter = require('./middleware/rateLimiter');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
@@ -16,6 +17,7 @@ app.use(limiter);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/loans', loanRoutes);
+app.use('/api/payments', paymentRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const PORT = process.env.PORT || 5000;

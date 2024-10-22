@@ -29,7 +29,7 @@
           "400": {
             "description": "Invalid input"
           }
-        }
+        ]
       }
     },
     "/auth/login": {
@@ -52,7 +52,7 @@
           "400": {
             "description": "Invalid credentials"
           }
-        }
+        ]
       }
     },
     "/loans": {
@@ -75,7 +75,7 @@
           "400": {
             "description": "Invalid input"
           }
-        }
+        ]
       },
       "get": {
         "summary": "Get all loans for the authenticated user",
@@ -92,7 +92,7 @@
           "400": {
             "description": "Invalid input"
           }
-        }
+        ]
       }
     },
     "/loans/{loanId}": {
@@ -124,7 +124,7 @@
           "404": {
             "description": "Loan not found"
           }
-        }
+        ]
       },
       "delete": {
         "summary": "Delete a loan",
@@ -146,7 +146,57 @@
           "404": {
             "description": "Loan not found"
           }
-        }
+        ]
+      }
+    },
+    "/payments": {
+      "post": {
+        "summary": "Create a new payment",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Payment"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Payment created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        ]
+      }
+    },
+    "/payments/{loanId}": {
+      "get": {
+        "summary": "Get all payments for a loan",
+        "parameters": [
+          {
+            "name": "loanId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of payments",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Payment"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        ]
       }
     }
   },
@@ -182,6 +232,21 @@
           "format": "date-time"
         },
         "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Payment": {
+      "type": "object",
+      "properties": {
+        "loanId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "paymentDate": {
           "type": "string",
           "format": "date-time"
         }
