@@ -4,7 +4,7 @@ const app = require('../server'); // Ensure the app is imported correctly
 const User = require('../models/User');
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGO_URI, {
+  await mongoose.connect(process.env.MONGO_URI_TEST, {
     
   });
 });

@@ -1,14 +1,14 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken'); // Ensure jwt is imported
+const jwt = require('jsonwebtoken');
 const app = require('../server');
 const User = require('../models/User');
 const Loan = require('../models/Loan');
-
+const ObjectId = mongoose.Types.ObjectId;
 let token;
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGO_URI, {
+  await mongoose.connect(process.env.MONGO_URI_TEST, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
@@ -55,7 +55,7 @@ describe('Loan API', () => {
   });
 
   it('should update a loan status', async () => {
-    const loan = new Loan({ userId: mongoose.Types.ObjectId(), amount: 1000 });
+    const loan = new Loan({ userId: new ObjectId(), amount: 1000 }); // Use 'new' keyword
     await loan.save();
 
     const res = await request(app)
@@ -69,7 +69,7 @@ describe('Loan API', () => {
   });
 
   it('should delete a loan', async () => {
-    const loan = new Loan({ userId: mongoose.Types.ObjectId(), amount: 1000 });
+    const loan = new Loan({ userId: new ObjectId(), amount: 1000 }); // Use 'new' keyword
     await loan.save();
 
     const res = await request(app)
