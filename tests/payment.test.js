@@ -8,11 +8,11 @@ const Payment = require('../models/Payment');
 
 let token;
 let loanId;
+let paymentId;
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  await mongoose.connect(process.env.MONGO_URI_TEST, {
+
   });
 
   const user = new User({ username: 'testuser', password: 'password123', role: 'Borrower' });
@@ -44,6 +44,7 @@ describe('Payment API', () => {
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty('_id');
     expect(res.body).toHaveProperty('amount', 200);
+    paymentId = res.body._id;
   });
 
   it('should get all payments for a loan', async () => {
@@ -57,6 +58,33 @@ describe('Payment API', () => {
 
     const res = await request(app)
       .get(`/api/payments/${loanId}`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toHaveLength(1);
+  });
+
+  it('should update a payment', async () => {
+    const res = await request(app)
+      .put(`/api/payments/${paymentId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        amount: 300
+      });
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toHaveProperty('amount', 300);
+  });
+
+  it('should get all payments for a specific borrower', async () => {
+    await request(app)
+      .post('/api/payments')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        loanId,
+        amount: 200
+      });
+
+    const res = await request(app)
+      .get(`/api/payments/borrower/${token}`)
       .set('Authorization', `Bearer ${token}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveLength(1);
