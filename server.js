@@ -6,7 +6,7 @@ const loanRoutes = require('./routes/loanRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const limiter = require('./middleware/rateLimiter');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerSpecs = require('./swaggerConfig');
 
 dotenv.config();
 connectDB();
@@ -18,8 +18,7 @@ app.use(limiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/loans', loanRoutes);
 app.use('/api/payments', paymentRoutes);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
